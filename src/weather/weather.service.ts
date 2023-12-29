@@ -1,17 +1,16 @@
 import {Injectable} from "@nestjs/common";
 import {HttpService} from "@nestjs/axios";
-import {ConfigService} from "@nestjs/config";
+import {BotConfigService} from "../common/config/bot.config";
 
 @Injectable()
 export class WeatherService {
     constructor(
         private readonly httpService: HttpService,
-        private readonly configService: ConfigService,
+        private readonly botConfigService: BotConfigService,
     ) {}
 
     getWeather(latitude, longitude) {
-        const apiUrl = this.configService.get('OPEN_WEATHER_API_URL');
-        const apiKey = this.configService.get('OPEN_WEATHER_API_KEY');
+        const {apiUrl, apiKey} = this.botConfigService.openWeatherUrlAndToken;
         const options = {
             params: {
                 appid: apiKey,

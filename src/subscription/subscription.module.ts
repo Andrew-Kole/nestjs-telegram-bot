@@ -7,6 +7,8 @@ import {HttpModule} from "@nestjs/axios";
 import {MongooseModule} from "@nestjs/mongoose";
 import {Subscription, SubscriptionSchema} from "./subscription.schema";
 import {WeatherCronService} from "./weather.cron.service";
+import {BotRepliesService} from "../common/config/bot.replies";
+import {BotConfigService} from "../common/config/bot.config";
 
 @Module({
     imports: [
@@ -18,6 +20,6 @@ import {WeatherCronService} from "./weather.cron.service";
             },
         ]),
     ],
-    providers: [SubscriptionService, SubscriptionWizard, SubscriptionUpdate, WeatherService, WeatherCronService],
+    providers: [SubscriptionService, SubscriptionWizard, SubscriptionUpdate, WeatherService, WeatherCronService, BotRepliesService, BotConfigService],
 })
 export class SubscriptionModule {}

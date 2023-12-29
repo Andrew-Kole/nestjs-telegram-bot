@@ -1,11 +1,13 @@
 import {Command, Ctx, Update} from "nestjs-telegraf";
 import {Context} from "telegraf";
 import {SubscriptionService} from "./subscription.service";
+import {BotRepliesService} from "../common/config/bot.replies";
 
 @Update()
 export class SubscriptionUpdate {
     constructor(
         private readonly subscriptionService: SubscriptionService,
+        private readonly botRepliesService: BotRepliesService,
     ) {}
     @Command('subscribe')
     async onSubscribeCommand(@Ctx() ctx: Context){
@@ -14,7 +16,7 @@ export class SubscriptionUpdate {
         const chatId = ctx.chat.id;
         const isSubscribed = await this.subscriptionService.isSubscribed(chatId, userId);
         if(isSubscribed){
-            return `Sorry, ${username}, you are already subscribed.`
+            return this.botRepliesService.alreadySubscribedReply.reply('{{username}}', username);
         }
         await ctx['scene'].enter('subscription');
     }
@@ -31,9 +33,9 @@ export class SubscriptionUpdate {
 
         const isSubscribed = await this.subscriptionService.isSubscribed(chatId, userId);
         if(!isSubscribed) {
-            return `${username}, you are not subscribed for weather notifications in ${chatName} chat `;
+            return this.botRepliesService.notSubscribedReply.replace('{{username}}', username).replace('{{chatName}}', chatName);
         }
         await this.subscriptionService.removeSubscription(chatId, userId);
-        return `${username}, you will not get weather notifications in ${chatName} chat  no more`
+        return this.botRepliesService.unsubscribeReply.replace('{{username}}', username).replace('{{chatName}}', chatName);
     }
 }

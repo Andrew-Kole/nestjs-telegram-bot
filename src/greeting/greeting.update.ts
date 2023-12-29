@@ -6,8 +6,8 @@ export class GreetingUpdate {
     constructor(private readonly greetingService: GreetingService) {}
 
     @Command('start')
-    onStartCommand(): string {
-        return this.greetingService.startReply();
+    async onStartCommand() {
+        return await this.greetingService.startReply();
     }
 
     @Command('help')

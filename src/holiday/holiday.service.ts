@@ -1,17 +1,16 @@
 import {Injectable} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
 import {HttpService} from "@nestjs/axios";
+import {BotConfigService} from "../common/config/bot.config";
 
 @Injectable()
 export class HolidayService {
     constructor(
-        private readonly configService: ConfigService,
+        private readonly botConfigService: BotConfigService,
         private readonly httpService: HttpService,
     ) {}
 
     getHolidays(countryCode: string) {
-        const apiUrl = this.configService.get('ABSTRACT_API_URL');
-        const apiKey = this.configService.get('ABSTRACT_API_KEY');
+        const {apiUrl, apiKey} = this.botConfigService.abstractApiUrlAndToken;
         const currentDate = new Date();
         const options = {
             params: {

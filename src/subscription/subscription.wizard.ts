@@ -2,6 +2,8 @@ import {Command, Ctx, Message, On, Wizard, WizardStep} from "nestjs-telegraf";
 import {SubscriptionService} from "./subscription.service";
 import {WizardContext} from "telegraf/typings/scenes";
 import {WeatherService} from "../weather/weather.service";
+import {BotConfigService} from "../common/config/bot.config";
+import {BotRepliesService} from "../common/config/bot.replies";
 
 @Wizard('subscription')
 export class SubscriptionWizard{
@@ -9,6 +11,8 @@ export class SubscriptionWizard{
     constructor(
         private readonly subscriptionService: SubscriptionService,
         private readonly weatherService: WeatherService,
+        private readonly botConfigService: BotConfigService,
+        private readonly botRepliesService: BotRepliesService,
     ) {}
 
     @WizardStep(1)
@@ -16,7 +20,7 @@ export class SubscriptionWizard{
         const username = ctx.from.username;
         ctx.wizard.next();
         this.setStepTimeout(ctx);
-        return `Glad you decided to subscribe weather notifications, ${username}. Let me get some information. Provide time please in format HH:mm (09:00 e.g.).'`;
+        return this.botRepliesService.subscribeEnterReply.replace('{{username}}', username);
     }
 
     @On('text')
@@ -26,12 +30,12 @@ export class SubscriptionWizard{
         const providedTime = msg.text.trim();
         const timeRegex = /^\d{2}:\d{2}$/;
         if(!timeRegex.test(providedTime)) {
-            return 'Provide time in correct format. It must be HH:mm (09:00 e.g.)'
+            return this.botRepliesService.subscribeTimeFormatRejectReply;
         }
         ctx.wizard.state['time'] = providedTime;
         ctx.wizard.next();
         this.setStepTimeout(ctx);
-        return `Ok, got time for notifications, share, please, your location.`
+        return this.botRepliesService.subscribeTimeApproveReply;
     }
 
     @On('location')
@@ -52,19 +56,19 @@ export class SubscriptionWizard{
             chatName = 'this chat'
         }
         ctx.scene.reset();
-        return `${username}, you will get daily notifications with weather in ${chatName} on ${time} for ${region}. Thanks for using my service`;
+        return this.botRepliesService.finishedSubscriptionReply.replace('{{username}}', username).replace('{{chatName}}', chatName).replace('{{time}}', time).replace('{{region}}', region);
     }
 
     @Command('cancel')
     async onCancelSubscription(@Ctx() ctx: WizardContext) {
         ctx.scene.reset();
-        return 'Sorry you decided to cancel subscription';
+        return this.botRepliesService.cancelSubscriptionReply;
     }
 
     private setStepTimeout(@Ctx() ctx: WizardContext) {
         this.timeOut = setTimeout(() => {
-            ctx.reply("You haven't provided any data, unfortunately, subscription cancelled");
+            ctx.reply(this.botRepliesService.timeUpSubscriptionReply);
             ctx.scene.reset();
-        }, 60000);
+        }, this.botConfigService.timeExpired);
     }
 }

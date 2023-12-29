@@ -1,0 +1,22 @@
+{
+  "startReply": "Hello, unexpected user, I'm very useful bot. If you want to see what I can do, provide command /help.",
+  "helpReply": "Very glad of your interest, look then: \n/start - Greetings from me, nothing special\n/help - Since you read this you, probably, already know what does it do, but i must explain it. Here you can see a list of tasks i can do.\n/links - Here you can see links to the profiles of my creator and owner\n/about - Here you can see some information about my creator\n/holiday - Here you can get information about today's holidays in different countries\n/subscribe - here you can subscribe on daily weather notification by polish time\n/unsubscribe - here you can unsubscribe the daily notifications\nyou can also share your location and i will send you current weather information\n/meme - it will send you random meme from reddit",
+  "aboutReply": "My name is Andrew. I'm from Odessa. Last 8 years living in Poland and learning programming.",
+  "linksReply": "Here GitHub:\n{{GITHUB_LINK}}\nand LinkedIn:\n{{LINKEDIN_LINK}}",
+  "chooseCountryReply": "Choose country: ",
+  "noHolidayReply": "There is no holidays today in {{countryName}}",
+  "todayHolidaysReply": "Today's holidays in {{location}} are:",
+  "holidayErrorReply": "Something went wrong way, contact my creator",
+  "memeErrorReply": "Failed to get meme",
+  "alreadySubscribedReply": "Sorry, {{username}}, you are already subscribed.",
+  "notSubscribedReply": "{{username}}, you are not subscribed for weather notifications in {{chatName}} chat",
+  "unsubscribeReply": "{{username}}, you will not get weather notifications in {{chatName}} chat  no more",
+  "subscribeEnterReply": "Glad you decided to subscribe weather notifications, {{username}}. Let me get some information. Provide time please in format HH:mm (09:00 e.g.).",
+  "subscribeTimeFormatRejectReply": "Provide time in correct format. It must be HH:mm (09:00 e.g.)",
+  "subscribeTimeApproveReply": "Ok, got time for notifications, share, please, your location.",
+  "finishedSubscriptionReply": "{{username}}, you will get daily notifications with weather in {{chatName}} on {{time}} for {{region}}. Thanks for using my service",
+  "cancelSubscriptionReply": "Sorry you decided to cancel subscription",
+  "timeUpSubscriptionReply": "You haven't provided any data, unfortunately, subscription cancelled",
+  "weatherCronReply": "Your weather for today:\nDescription{{weatherDescription}}\nTemperature:{{temperature}}°C. Have a nice day!",
+  "weatherCommandReply": "The weather in place you shared:\nDescription: {{description}}\nTemperature: {{temperature}}°C"
+}
